@@ -1,0 +1,53 @@
+\documentclass[reqno, 11pt]{amsart}
+\usepackage[margin=1in]{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\title{Doyle-Fuller-Newman Model}
+\author{Numerical Implementation}
+\date{\today}                                           % Activate to display a given date or no date
+
+\usepackage{color}
+\renewcommand \thesection{\Roman{section}}
+
+\begin{document}
+\maketitle
+
+%%%%%%%%
+\section{Electrolyte Concentration: $c_{e}(x,t)$}
+Continuous-time/space equations
+\begin{eqnarray}
+	\frac{\partial c_{e}}{\partial t}(x,t) &=& \frac{\partial}{\partial x} \left[D_{e} \frac{\partial c_{e}}{\partial x}(x,t) + \frac{1 - t^{0}_{c}}{\epsilon_{e} F} i_{e}(x,t) \right] \\
+	\left. \frac{\partial c_{e}}{\partial x} \right|_{x = 0^{-}} &=& 0 \\
+	\epsilon_{e}^{-} D_{e} \left. \frac{\partial c_{e}}{\partial x} \right|_{x = L^{-}} &=& \epsilon_{e}^{sep} D_{e} \left. \frac{\partial c_{e}}{\partial x} \right|_{x = 0^{sep}} \\
+	\epsilon_{e}^{sep} D_{e} \left. \frac{\partial c_{e}}{\partial x} \right|_{x = L^{sep}} &=& \epsilon_{e}^{+} D_{e} \left. \frac{\partial c_{e}}{\partial x} \right|_{x = L^{+}} \\
+	\left. \frac{\partial c_{e}}{\partial x} \right|_{x = 0^{+}} &=& 0
+\end{eqnarray}
+
+
+CN discretization. Let $\alpha = \frac{D_{e} \Delta t}{2 \Delta x^{2}}$ and $\beta = \frac{1 - t_{c}^{0}}{\epsilon_{e} F} \cdot \frac{\Delta t}{4 \Delta x}$
+\begin{eqnarray}
+	&& -\alpha c_{i+1}^{k+1} + (1 + 2 \alpha) c_{i}^{k+1} - \alpha c_{i-1}^{k+1} - i_{e,i+1}^{k+1} + \beta i_{e,i-1}^{k+1} \nonumber \\
+	&=& \alpha c_{i+1}^{k} + (1 - 2 \alpha) c_{i}^{k} - \alpha c_{i-1}^{k} - i_{e,i+1}^{k} + \beta i_{e,i-1}^{k} 
+\end{eqnarray}
+
+\begin{eqnarray}
+	\frac{c_{n,1}}{\Delta x_{n}} - \frac{c_{n,0}}{\Delta x_{n}} &=& 0 \\
+	-\frac{\epsilon_{e,n} D_{e,n}}{\Delta x_{n}} c_{n,N-1} -\frac{\epsilon_{e,s} D_{e,s}}{\Delta x_{s}} c_{s,1} + \left( \frac{\epsilon_{e,n} D_{e,n}}{\Delta x_{n}} + \frac{\epsilon_{e,s} D_{e,s}}{\Delta x_{s}} \right) c_{ns} &=& 0 \\
+	-\frac{\epsilon_{e,s} D_{e,s}}{\Delta x_{s}} c_{s,N-1} -\frac{\epsilon_{e,p} D_{e,p}}{\Delta x_{p}} c_{p,1} + \left( \frac{\epsilon_{e,s} D_{e,s}}{\Delta x_{s}} + \frac{\epsilon_{e,p} D_{e,p}}{\Delta x_{p}} \right) c_{sp} &=& 0 \\
+	-\frac{c_{p,N-1}}{\Delta x_{p}} + \frac{c_{p,N}}{\Delta x_{p}} &=& 0
+\end{eqnarray}
+
+\begin{eqnarray}
+	(M_{1} - M_{2} N_{2}^{-1} N_{1}) c^{k+1} + M_{3} i_{e}^{k+1} &=& (M_{4} - M_{5} N_{2}^{-1} N_{1}) c^{k} + M_{6} i_{e}^{k} \\
+	F_{1} c^{k+1} + F_{2} i_{e}^{k+1} &=& F_{3} c^{k} + F_{4} i_{e}^{k}
+\end{eqnarray}
+
+
+
+\end{document}  

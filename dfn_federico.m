@@ -65,8 +65,14 @@ V0 = 3.9;
 c_s_n0 = zeros(p.PadeOrder,1);
 c_s_p0 = zeros(p.PadeOrder,1);
 
-c_s_n0(1) = csn0 * (-p.R_s_n/3) * (p.R_s_n^4 / (3465 * p.D_s_n^2));
-c_s_p0(1) = csp0 * (-p.R_s_p/3) * (p.R_s_p^4 / (3465 * p.D_s_p^2));
+%%%%% Initial condition based on controllable canonical form
+% c_s_n0(1) = csn0 * (-p.R_s_n/3) * (p.R_s_n^4 / (3465 * p.D_s_n^2));
+% c_s_p0(1) = csp0 * (-p.R_s_p/3) * (p.R_s_p^4 / (3465 * p.D_s_p^2));
+
+%%%%% Initial condition based on Jordan form
+c_s_n0(3) = csn0;
+c_s_p0(3) = csp0;
+%%%%%
 
 c_s_n = zeros(Ncsn,NT);
 c_s_p = zeros(Ncsp,NT);

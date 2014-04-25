@@ -48,6 +48,46 @@ C1p = bp_vecp';
 C2p = b_vecp(1) * ap_vecp(2:end)';
 Cp = [C1p; C2p];
 
+%% Convert to Jordan-Form   NEW Apr 24, 2014
+% Similarity Matrix, computed symbolically
+Vn = [-(p.R_s_n^4*(9*sqrt(2429)-457))/(381150*p.D_s_n^2), (p.R_s_n^4*(9*sqrt(2429)+457))/(381150*p.D_s_n^2), 1;...
+       p.R_s_n^2*(sqrt(2429)-63)/(2310*p.D_s_n), -p.R_s_n^2*(sqrt(2429)+63)/(2310*p.D_s_n), 0;...
+       1, 1, 0];
+Vp = [-(p.R_s_p^4*(9*sqrt(2429)-457))/(381150*p.D_s_p^2), (p.R_s_p^4*(9*sqrt(2429)+457))/(381150*p.D_s_p^2), 1;...
+       p.R_s_p^2*(sqrt(2429)-63)/(2310*p.D_s_p), -p.R_s_p^2*(sqrt(2429)+63)/(2310*p.D_s_p), 0;...
+       1, 1, 0];
+
+An1 = Vn\An*Vn;
+Ap1 = Vp\Ap*Vp;
+
+Bn1 = Vn\Bn;
+Bp1 = Vp\Bp;
+
+Cn1 = Cn*Vn;
+Cp1 = Cp*Vp;
+
+% Perform additional transformation that scales third state, such that it's
+% exactly \bar{c}_s^\pm
+Vn2 = diag([1 1 1/Cn1(2,3)]);
+Vp2 = diag([1 1 1/Cp1(2,3)]);
+
+An2 = Vn2\An1*Vn2;
+Ap2 = Vp2\Ap1*Vp2;
+
+Bn2 = Vn2\Bn1;
+Bp2 = Vp2\Bp1;
+
+Cn2 = Cn1*Vn2;
+Cp2 = Cp1*Vp2;
+
+An = An2;
+Ap = Ap2;
+Bn = Bn2;
+Bp = Bp2;
+Cn = Cn2;
+Cp = Cp2;
+   
+%% Set Varargout
 varargout{1} = Cn;
 varargout{2} = Cp;
 

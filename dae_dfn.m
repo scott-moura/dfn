@@ -82,7 +82,7 @@ c_ex = [c_e_bcs(1); c_e(1:Nn); c_e_bcs(2); c_e(Nn+1:Nn+p.Nxs-1); ...
         c_e_bcs(3); c_e(Nn+p.Nxs : end); c_e_bcs(4)];
 
 % System Matrices
-[A_ce, B_ce, ~] = c_e_mats(p,c_ex);
+[A_ce, B_ce, trash_var] = c_e_mats(p,c_ex);
     
 % Compute derivative
 c_e_dot = A_ce*c_e + B_ce*i_ex;
@@ -132,8 +132,8 @@ jp_dot = 2/p.Faraday * i_0p .* sinh(aFRT * eta_p) - jp;
 
 %% Temperature
 % Equilibrium Potential and Gradient wrt bulk concentration
-[Unb,~,dUnbdT] = refPotentialAnode(p, c_avg_n / p.c_s_n_max);
-[Upb,~,dUpbdT] = refPotentialCathode(p, c_avg_p / p.c_s_p_max);
+[Unb,trash_var,dUnbdT] = refPotentialAnode(p, c_avg_n / p.c_s_n_max);
+[Upb,trash_var,dUpbdT] = refPotentialCathode(p, c_avg_p / p.c_s_p_max);
 
 % Heat generated from intercalation (w/o boundaries for NOW)
 Q_nx = p.a_s_n*p.Faraday * jn .* (Unb - T*dUnbdT);

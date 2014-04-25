@@ -1,7 +1,7 @@
 %% Plot Sensitivity Analysis Results of DFN
 %   Created February 23, 2014 by Scott Moura
 
-clear;
+%clear;
 close all;
 clc;
 
@@ -14,33 +14,43 @@ params = {'$D_s^-$','$D_s^+$','$D_e^-$','$D_e^{sep}$','$D_e^+$','$1-t_c^0$',...
 
 %% Load Data;
 
-% Load Sensitivities
-fn = 'data/sensitivity/zero_sensitivity.mat';
-load(fn);
-disp(['Loaded Sensitivity data file:  ' fn]);
+%%%%%%%%%%%%%%%%%% Start Commented by Federico %%%%%%%%%%%%%%%%%%%%%%
+% % Load Sensitivities
+%fn = 'data/sensitivity/zero_sensitivity.mat';
+%load(fn);
+%disp(['Loaded Sensitivity data file:  ' fn]); 
 
-% Parse sensitivity data
-dfn_fn = out.fn;
-S1 = out.S1;
-S2 = out.S2;
-S3 = out.S3;
-clear out;
+% % Parse sensitivity data
+% dfn_fn = out.fn;
+% S1 = out.S1;
+% S2 = out.S2;
+% S3 = out.S3;
+% clear out;
+% 
+% % Load DFN Data
+% load(dfn_fn);
+% disp(['Loaded DFN data file:  ' fn]);
+% 
+% % Parse output data
+% t = out.time;
+% p = out.p;
+% Cur = out.cur;
+% SOC = out.soc;
+% Volt = out.volt;
+% clear out;
+% 
+% % Vector Sizes
+% Nt = 21;
+% NT = 20; %length(t);
 
-% Load DFN Data
-load(dfn_fn);
-disp(['Loaded DFN data file:  ' fn]);
+%%%%%%%%%%%%%%%%%% End Commented by Federico %%%%%%%%%%%%%%%%%%%%%%
 
-% Parse output data
-t = out.time;
-p = out.p;
-Cur = out.cur;
-SOC = out.soc;
-Volt = out.volt;
-clear out;
-
-% Vector Sizes
+%%%%%%%%%%%%%%%%%%% Start Added by Federico %%%%%%%%%%%%%%%%%%%%%%%
 Nt = 21;
-NT = 20; %length(t);
+NT =length(t);
+
+
+%%%%%%%%%%%%%%%%%%% End Added by Federico %%%%%%%%%%%%%%%%%%%%%%%
 
 % Compute Norms over time
 Snorm.volt.unsort = zeros(Nt,1);

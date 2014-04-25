@@ -175,14 +175,14 @@ JF(ind_csp,2) = reshape(JF_csp,[numel(JF_csp),1]);
 % Lap_p = -2*eye(Np) + (diag(ones(Np-1,1),1) + diag(ones(Np-1,1),-1));
 % 
 % % Gradients
-% Grad_n = diag(ones(Nn-1,1),1) - diag(ones(Nn-1,1),-1);
-% Grad_s = diag(ones(Ns-1,1),1) - diag(ones(Ns-1,1),-1);
-% Grad_p = diag(ones(Np-1,1),1) - diag(ones(Np-1,1),-1);
+ Grad_n = diag(ones(Nn-1,1),1) - diag(ones(Nn-1,1),-1);
+ Grad_s = diag(ones(Ns-1,1),1) - diag(ones(Ns-1,1),-1);
+ Grad_p = diag(ones(Np-1,1),1) - diag(ones(Np-1,1),-1);
 
 c_e_bcs = p.C_ce*c_e;
 c_ex = [c_e_bcs(1); c_e(1:Nn); c_e_bcs(2); c_e(Nn+1:Nn+p.Nxs-1); ...
         c_e_bcs(3); c_e(Nn+p.Nxs : end); c_e_bcs(4)];
-[A_ce, B_ce, ~] = c_e_mats(p,c_ex);
+[A_ce, B_ce, trash_var] = c_e_mats(p,c_ex);
 i_ex = [0; i_en; Cur*ones(p.Nxs+1,1); i_ep; 0];
 
 JF_ce_De = A_ce*c_e;
@@ -199,9 +199,9 @@ JF(ind_ce(Nn+1:Nn+p.Nxs-1),4) = JF_ce_De(Nn+1:Nn+p.Nxs-1);
 JF(ind_ce(end-Np+1:end),5) = JF_ce_De(end-Np+1:end);
 
 % wrt (1-t_plus)
-% JF(ind_ce(1:Nn),6) = beta_n/(p.epsilon_e_n * p.Faraday) * Grad_n * i_en;
-% JF(ind_ce(end-Np+1:end),6) = beta_p/(p.epsilon_e_p * p.Faraday) * Grad_p * i_ep;
-JF(ind_ce,6) = 0; %B_ce*i_ex / (1 - p.t_plus);
+ JF(ind_ce(1:Nn),6) = beta_n/(p.epsilon_e_n * p.Faraday) * Grad_n * i_en;
+ JF(ind_ce(end-Np+1:end),6) = beta_p/(p.epsilon_e_p * p.Faraday) * Grad_p * i_ep;
+%JF(ind_ce,6) = 0; %B_ce*i_ex / (1 - p.t_plus);
 
 % wrt epsilon_e_n
 % JF(ind_ce(1:Nn),15) = -beta_n*(1-p.t_plus)/(p.epsilon_e_n^2*p.Faraday) * Grad_n * i_en;
@@ -212,8 +212,8 @@ JF(ind_ce(end-Np+1:end),17) = 0; %-(1/p.epsilon_e_p) * JF_ce_ie(end-Np+1:end);
 
 %%% [DONE] Temperature: T(t)
 % Equilibrium Potential and Gradient wrt bulk concentration
-[Unb,~,dUnbdT] = refPotentialAnode(p, c_avg_n / p.c_s_n_max);
-[Upb,~,dUpbdT] = refPotentialCathode(p, c_avg_p / p.c_s_p_max);
+[Unb,trash_var,dUnbdT] = refPotentialAnode(p, c_avg_n / p.c_s_n_max);
+[Upb,trash_var,dUpbdT] = refPotentialCathode(p, c_avg_p / p.c_s_p_max);
 
 % Heat generated from intercalation (w/o boundaries for NOW)
 Q_nx = p.a_s_n*p.Faraday * jn .* (Unb - T*dUnbdT);
@@ -244,7 +244,7 @@ JG(ind_phi_s_p,8) = -i_ep + Cur;
 
 
 %%% [DONE] Potential in Electrolyte Phase: phi_e(x,t)
-[~,F2_pe,F3_pe,~,~,~] = phi_e_mats(p,c_ex);
+[trash_var,F2_pe,F3_pe,trash_var,trash_var,trash_var] = phi_e_mats(p,c_ex);
 
 % wrt (1-t_plus)
 % JG(ind_phi_e(1:Nn),6) = -(2*p.R*p.T_amp)/(p.alph*p.Faraday) * (1 + 0) ...

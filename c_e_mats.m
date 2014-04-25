@@ -25,7 +25,6 @@ DeN = De(end);
 
 %% Block Matrices
 M1n = zeros(p.Nxn-1);
-% Iterate through rows
 for idx = 1:p.Nxn-1
     
     if(idx == 1)
@@ -43,7 +42,6 @@ for idx = 1:p.Nxn-1
 end
 
 M1s = zeros(p.Nxs-1);
-% Iterate through rows
 for idx = 1:p.Nxs-1
     
     if(idx == 1)
@@ -61,7 +59,6 @@ for idx = 1:p.Nxs-1
 end
 
 M1p = zeros(p.Nxp-1);
-% Iterate through rows
 for idx = 1:p.Nxp-1
     
     if(idx == 1)
@@ -102,7 +99,6 @@ M2 = sparse(M2);
   
 % M3 : i_e
 M3 = zeros(p.Nx-3,p.Nx+1);
-% Iterate through rows
 for idx = 1:p.Nx-3
     
     if(idx <= p.Nxn-1)
@@ -147,5 +143,6 @@ N2(4,4) = 1/(p.L_p * p.delta_x_p);
 A = sparse(M1 - M2*(N2\N1));
 B = sparse(M3);
 C = sparse(-N2\N1);
+
 
 

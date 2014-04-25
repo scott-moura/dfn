@@ -54,6 +54,8 @@ Volt = out.volt;
 
 % Vector Lengths
 NT = length(t); % Length of time
+% Only Simulate ~10 seconds
+NT=ceil(NT/30);
 Nt = 21;        % Number of params
 Ny = 3;         % Number of outputs
 
@@ -131,7 +133,7 @@ p.C_csp = C_csp;
 
 % Electrolyte concentration matrices
 c_ex = x(Ncsn+Ncsp+1,1) * ones(p.Nx+4,1);
-[~,~,C_ce] = c_e_mats(p,c_ex);
+[trash_var,trash_var,C_ce] = c_e_mats(p,c_ex);
 p.C_ce = C_ce;
 
 % Solid Potential
@@ -198,8 +200,8 @@ for k = 1:(NT-1)
         jac_dfn(x(:,k+1),z(:,k+1),Cur(k+1),p.A11,p.A12,p.A21,p.A22,p);
     
     %%% Jacobian w.r.t. params, @ current and nxt time step
-    [B1, ~, B2, ~] = jac_p_dfn(x(:,k),z(:,k),Cur(k),p);
-    [B1_nxt, ~, B2_nxt, ~] = jac_p_dfn(x(:,k+1),z(:,k+1),Cur(k+1),p);
+    [B1, trash_var, B2, trash_var] = jac_p_dfn(x(:,k),z(:,k),Cur(k),p);
+    [B1_nxt, trash_var, B2_nxt, trash_var] = jac_p_dfn(x(:,k+1),z(:,k+1),Cur(k+1),p);
     
     %%% Assemble Matrices
     A = A11 - A12*(A22\A21);

@@ -75,7 +75,7 @@ c_e_bcs = p.C_ce*c_e;
 c_ex = [c_e_bcs(1); c_en; c_e_bcs(2); c_es; c_e_bcs(3); c_ep; c_e_bcs(4)];
 
 % System matrices
-[A_ce, B_ce, ~] = c_e_mats(p,c_ex);
+[A_ce, B_ce, trash_var] = c_e_mats(p,c_ex);
 
 f_x(ind_ce,ind_ce) = A_ce;
 f_z(ind_ce(1:Nn),ind_ien) = B_ce(1:Nn,2:Nn+1);

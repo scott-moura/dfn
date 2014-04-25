@@ -1,18 +1,25 @@
 %% Matrices for Li Diffusion in Solid Phase, c_s(r,t)
 %   Created May 21, 2012 by Scott Moura
+%   Modified Jan 10, 2014 by Hector Perez 
 
 function [An,Bn,Ap,Bp,varargout] = c_s_mats(p)
 
 % Load Pade Approximations
 N = p.PadeOrder;
-load(['ws/pade_cs' num2str(N) '.mat']);
+% load(['ws/pade_cs' num2str(N) '.mat']);
 
 % Replace symbolic expressions with numerical values
-b_vecn = subs(pade_cs.num,{'R';'D'},[p.R_s_n; p.D_s_n]);
-a_vecn = subs(pade_cs.den,{'R';'D'},[p.R_s_n; p.D_s_n]);
+b_vecn = symsubsnum(p.R_s_n, p.D_s_n); %New Jan 10, 2014
+a_vecn = symsubsden(p.R_s_n, p.D_s_n); %New Jan 10, 2014
 
-b_vecp = subs(pade_cs.num,{'R';'D'},[p.R_s_p; p.D_s_p]);
-a_vecp = subs(pade_cs.den,{'R';'D'},[p.R_s_p; p.D_s_p]);
+b_vecp = symsubsnum(p.R_s_p, p.D_s_p); %New Jan 10, 2014
+a_vecp = symsubsden(p.R_s_p, p.D_s_p); %New Jan 10, 2014
+
+% b_vecn = subs(pade_cs.num(:),{'R';'D'},[p.R_s_n; p.D_s_n]); %Changed Jan 10, 2014, was pade_cs.num
+% a_vecn = subs(pade_cs.den(:),{'R';'D'},[p.R_s_n; p.D_s_n]); %Changed Jan 10, 2014, was pade_cs.den
+
+% b_vecp = subs(pade_cs.num(:),{'R';'D'},[p.R_s_p; p.D_s_p]); %Changed Jan 10, 2014, was pade_cs.num
+% a_vecp = subs(pade_cs.den(:),{'R';'D'},[p.R_s_p; p.D_s_p]); %Changed Jan 10, 2014, was pade_cs.den
 
 bp_vecn = b_vecn / a_vecn(end);
 ap_vecn = a_vecn / a_vecn(end);

@@ -6,7 +6,7 @@ tic;
 
 %% Model Construction
 % Electrochemical Model Parameters
-run ../params_dualfoil
+run params_dualfoil
 
 % Vector lengths
 Ncsn = p.PadeOrder * (p.Nxn-1);

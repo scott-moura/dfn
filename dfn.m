@@ -6,7 +6,7 @@ tic;
 
 %% Model Construction
 % Electrochemical Model Parameters
-run ../params_bosch
+run params_bosch
 
 % Vector lengths
 Ncsn = p.PadeOrder * (p.Nxn-1);
@@ -24,20 +24,20 @@ Nz = 3*Nnp + Nx;
 % Manual Data
 t = -2:p.delta_t:500;       % 60*60
 Iamp = zeros(length(t),1);
-% Iamp(t >= 0) = 1;
+Iamp(t >= 0) = 10;
 % Iamp(t >= (20*60)) = 0;
 % Iamp(t >= 20) = 0;
 % Iamp(t >= 30) = 10;
 % Iamp(t >= 40) = 5;
 I = Iamp;
 
-% % Pulse Data
+% Pulse Data
 % t = -2:p.delta_t:240;
 % I(t >= 0) = 0;
 % I(mod(t,40) < 20) = 175;
 % Iamp = I;
 
-% % Experimental Data
+% Experimental Data
 % load('data/UDDSx2_batt_ObsData.mat');
 % tdata = t;
 % Tfinal = tdata(end);
@@ -50,7 +50,7 @@ NT = length(t);
 
 %% Initial Conditions & Preallocation
 % Solid concentration
-V0 = 4.0;
+V0 = 3.9;
 [csn0,csp0] = init_cs(p,V0);
 
 c_s_n0 = zeros(p.PadeOrder,1);
@@ -159,7 +159,7 @@ p.C_csn = C_csn;
 p.C_csp = C_csp;
 
 % Electrolyte concentration matrices
-[~,~,C_ce] = c_e_mats(p,c_ex);
+[trash_var,trash_var,C_ce] = c_e_mats(p,c_ex);
 p.C_ce = C_ce;
 
 % Solid Potential
@@ -237,7 +237,7 @@ for k = 1:(NT-1)
     newtonStats.condJac(k+1) = stats.condJac;
     
     % Output data
-    [~, ~, y] = dae_dfn(x(:,k+1),z(:,k+1),I(k+1),p);
+    [trash_var, trash_var, y] = dae_dfn(x(:,k+1),z(:,k+1),I(k+1),p);
     
     c_ss_n(:,k+1) = y(1:Nn);
     c_ss_p(:,k+1) = y(Nn+1:Nnp);
@@ -263,7 +263,6 @@ for k = 1:(NT-1)
     
     fprintf(1,'Time : %3.2f sec | Current : %2.4f A/m^2 | SOC : %1.3f | Voltage : %2.4fV\n',...
         t(k),I(k+1),SOC(k+1),Volt(k+1));
-    fprintf(1,'Percent Complete %3.1f%% \n',100*k/NT);
     
     if(Volt(k+1) < p.volt_min)
         fprintf(1,'Min Voltage of %1.1fV exceeded\n',p.volt_min);

@@ -46,10 +46,10 @@ if(Cur ~= Cur_prv)
     for idx = 1:(maxIters-1)
         
         % DAE eqns for current time-step
-        [~,g] = dae_dfn(x,z_cons(:,idx),Cur,p);
+        [trash_var,g] = dae_dfn(x,z_cons(:,idx),Cur,p);
         
         % Jacobian of DAE eqns
-        [~,~,~,g_z] = jac_dfn(x,z_cons(:,idx),Cur,p.f_x,p.f_z,p.g_x,p.g_z,p);
+        [trash_var,trash_var,trash_var,g_z] = jac_dfn(x,z_cons(:,idx),Cur,p.f_x,p.f_z,p.g_x,p.g_z,p);
         
         % Newton Iteration
         Delta_z = -(g_z\g);
@@ -138,18 +138,10 @@ for idx = 1:(maxIters-1)
 %     DJ = D*J;
 %     DF = D*F;
 
-%     condest(J);
-
     % Newton Iteration
-%     [LL,UU,PP] = ilu(DJ,struct('type','ilutp','droptol',1e-6,'udiag',1));
-%     w = warning('query','last');
-%     id = w.identifier;
-%     warning('off',id);
-
-    Delta_y = -(J\F);
-
-%     Delta_z = -(LL\(PP*DF));
-%     Delta_y = UU\Delta_z;
+%     [LL,UU] = ilu(DJ,struct('type','ilutp','droptol',1e-6,'udiag',1));
+    
+    Delta_y = -(J\F); 
     
 %     [Delta_y,fl,rr,it,rrv] = bicg(DJ,-DF,linEqnTol,linEqnMaxIter,LL,UU);
 %     [Delta_y,fl,rr,it,rrv] = gmres(DJ,-DF,[],1e-12,linEqnMaxIter,LL,UU);

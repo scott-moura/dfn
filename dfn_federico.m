@@ -165,10 +165,12 @@ z(:,1) = z0;
 
 %% Precompute data
 % Solid concentration matrices
-[A_csn,B_csn,A_csp,B_csp,C_csn,C_csp] = c_s_mats(p);
+[A_csn,B_csn,A_csp,B_csp,C_csn,C_csp,A_csn_normalized, A_csp_normalized] = c_s_mats(p);
 p.A_csn = A_csn;
+p.A_csn_normalized= A_csn_normalized;
 p.B_csn = B_csn;
 p.A_csp = A_csp;
+p.A_csp_normalized=A_csp_normalized;
 p.B_csp = B_csp;
 p.C_csn = C_csn;
 p.C_csp = C_csp;

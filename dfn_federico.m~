@@ -22,14 +22,17 @@ Nz = 3*Nnp + Nx;
 %% Input Signal
 
 % Manual Data
-t = -2:p.delta_t:500;       % 60*60
-Iamp = zeros(length(t),1);
-Iamp(t >= 0) = 10;
-% Iamp(t >= (20*60)) = 0;
-% Iamp(t >= 20) = 0;
-% Iamp(t >= 30) = 10;
-% Iamp(t >= 40) = 5;
-I = Iamp;
+%%%%%%%%%%% Commented by Federico %%%%%%%%%%%%%
+% % t = -2:p.delta_t:500;       % 60*60
+% % Iamp = zeros(length(t),1);
+% % Iamp(t >= 0) = 10;
+% % % Iamp(t >= (20*60)) = 0;
+% % % Iamp(t >= 20) = 0;
+% % % Iamp(t >= 30) = 10;
+% % % Iamp(t >= 40) = 5;
+% % I = Iamp;
+
+%%%%%%%%% End Commented by Federico %%%%%%%%%%%
 
 % Pulse Data
 % t = -2:p.delta_t:240;
@@ -38,13 +41,19 @@ I = Iamp;
 % Iamp = I;
 
 % Experimental Data
-% load('data/UDDSx2_batt_ObsData.mat');
-% tdata = t;
-% Tfinal = tdata(end);
-% t = -2:p.delta_t:Tfinal;
-% Iamp = interp1(tdata,I,t,'spline',0);
-% Ah_amp = trapz(tdata,I)/3600;
-% I = Iamp * (0.4*35)/Ah_amp;
+%%%%%%%%%%% Uncommented by Federico %%%%%%%%%%%%%
+ load('data/UDDSx2_batt_ObsData.mat');
+ tdata = t;
+ Tfinal = tdata(end);
+ t = -2:p.delta_t:Tfinal;
+ Iamp = interp1(tdata,I,t,'spline',0);
+ Ah_amp = trapz(tdata,I)/3600;
+ I = Iamp * (0.4*35)/Ah_amp;
+ %cut the simulation time to 500 seconds
+ t=-2:p.delta_t:500;
+ I=I(1:length(t));
+
+%%%%%%%%% End Uncommented by Federico %%%%%%%%%%%
 
 NT = length(t);
 
@@ -56,8 +65,14 @@ V0 = 3.9;
 c_s_n0 = zeros(p.PadeOrder,1);
 c_s_p0 = zeros(p.PadeOrder,1);
 
-c_s_n0(1) = csn0 * (-p.R_s_n/3) * (p.R_s_n^4 / (3465 * p.D_s_n^2));
-c_s_p0(1) = csp0 * (-p.R_s_p/3) * (p.R_s_p^4 / (3465 * p.D_s_p^2));
+%%%%% Initial condition based on controllable canonical form
+% c_s_n0(1) = csn0 * (-p.R_s_n/3) * (p.R_s_n^4 / (3465 * p.D_s_n^2));
+% c_s_p0(1) = csp0 * (-p.R_s_p/3) * (p.R_s_p^4 / (3465 * p.D_s_p^2));
+
+%%%%% Initial condition based on Jordan form
+c_s_n0(3) = csn0;
+c_s_p0(3) = csp0;
+%%%%%
 
 c_s_n = zeros(Ncsn,NT);
 c_s_p = zeros(Ncsp,NT);
@@ -159,7 +174,7 @@ p.C_csn = C_csn;
 p.C_csp = C_csp;
 
 % Electrolyte concentration matrices
-[trash_var,trash_var,C_ce] = c_e_mats(p,c_ex);
+[trash_var,trash_var,C_ce] = c_e_mats_federico(p,c_ex);
 p.C_ce = C_ce;
 
 % Solid Potential
@@ -206,7 +221,7 @@ for k = 1:(NT-1)
     end
     
     % Step-forward in time
-    [x(:,k+1), z(:,k+1), stats] = cn_dfn(x(:,k),z(:,k),Cur_vec,p);
+    [x(:,k+1), z(:,k+1), stats] = cn_dfn_federico(x(:,k),z(:,k),Cur_vec,p);
 
     % Parse out States
     c_s_n(:,k+1) = x(1:Ncsn, k+1);
@@ -237,7 +252,7 @@ for k = 1:(NT-1)
     newtonStats.condJac(k+1) = stats.condJac;
     
     % Output data
-    [trash_var, trash_var, y] = dae_dfn(x(:,k+1),z(:,k+1),I(k+1),p);
+    [trash_var, trash_var, y] = dae_dfn_federico(x(:,k+1),z(:,k+1),I(k+1),p);
     
     c_ss_n(:,k+1) = y(1:Nn);
     c_ss_p(:,k+1) = y(Nn+1:Nnp);

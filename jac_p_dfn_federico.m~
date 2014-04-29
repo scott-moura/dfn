@@ -36,7 +36,7 @@
 %   20 : h
 %   21 : 1/(rho_avg * C_p)
 
-function [JF, JFb, JG, JGb] = jac_p_dfn(x,z,Cur,p)
+function [JF, JFb, JG, JGb] = jac_p_dfn_federico(x,z,Cur,p)
 
 
 %% Parse out states
@@ -145,9 +145,15 @@ beta_p = 1 / (2 * p.L_p * p.delta_x_p);
 
 %% [DONE] Terms of JF
 %%% [DONE] Li Diffusion in Solid Phase: c_s(x,r,t)
-An = zeros(3);
-An(3,2) = -6930*p.D_s_n/p.R_s_n^4;
-An(3,3) = -189/p.R_s_n^2;
+
+%%%%%%%%%%%%%%%%%% Start commented by Federico %%%%%%%%%%%%%%%%
+%An = zeros(3);
+%An(3,2) = -6930*p.D_s_n/p.R_s_n^4;
+%An(3,3) = -189/p.R_s_n^2;
+%%%%%%%%%%%%%%%%%%% End commented by Federico %%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Start added by Federico %%%%%%%%%%%%%%%%%%
+An=p.A_csn_normalized;
+%%%%%%%%%%%%%%%%%%%%% End added by Federico %%%%%%%%%%%%%%%%%%%
 
 % Loop through each "comb tooth" in anode
 JF_csn = zeros(3,Nn);
@@ -156,9 +162,14 @@ for idx = 1:Nn
 end
 JF(ind_csn,1) = reshape(JF_csn,[numel(JF_csn),1]);
 
-Ap = zeros(3);
-Ap(3,2) = -6930*p.D_s_p/p.R_s_p^4;
-Ap(3,3) = -189/p.R_s_p^2;
+%%%%%%%%%%%%%%%%%% Start commented by Federico %%%%%%%%%%%%%%%%
+%Ap = zeros(3);
+%Ap(3,2) = -6930*p.D_s_p/p.R_s_p^4;
+%Ap(3,3) = -189/p.R_s_p^2;
+%%%%%%%%%%%%%%%%%%% End commented by Federico %%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Start added by Federico %%%%%%%%%%%%%%%%%%
+Ap=p.A_csp_normalized;
+%%%%%%%%%%%%%%%%%%%%% End added by Federico %%%%%%%%%%%%%%%%%%%
 
 % Loop through each "comb tooth" in cathode
 JF_csp = zeros(3,Np);
@@ -182,18 +193,23 @@ JF(ind_csp,2) = reshape(JF_csp,[numel(JF_csp),1]);
 c_e_bcs = p.C_ce*c_e;
 c_ex = [c_e_bcs(1); c_e(1:Nn); c_e_bcs(2); c_e(Nn+1:Nn+p.Nxs-1); ...
         c_e_bcs(3); c_e(Nn+p.Nxs : end); c_e_bcs(4)];
-[A_ce, B_ce, trash_var] = c_e_mats(p,c_ex);
+[A_ce, B_ce, trash_var] = c_e_mats_federico(p,c_ex);
 i_ex = [0; i_en; Cur*ones(p.Nxs+1,1); i_ep; 0];
 
 JF_ce_De = A_ce*c_e;
 JF_ce_ie = B_ce*i_ex;
 
+%%% ADD BC
 % wrt D_e_n
 % JF(ind_ce(1:Nn),3) = alpha_n * Lap_n * c_en;
 JF(ind_ce(1:Nn),3) = JF_ce_De(1:Nn);
+
+%%% ADD BC
 % wrt D_e_s
 % JF(ind_ce(Nn+1:Nn+p.Nxs-1),4) = alpha_s * Lap_s * c_es;
 JF(ind_ce(Nn+1:Nn+p.Nxs-1),4) = JF_ce_De(Nn+1:Nn+p.Nxs-1);
+
+%%% ADD BC
 % wrt D_e_p
 % JF(ind_ce(end-Np+1:end),5) = alpha_p * Lap_p * c_ep;
 JF(ind_ce(end-Np+1:end),5) = JF_ce_De(end-Np+1:end);
@@ -203,12 +219,18 @@ JF(ind_ce(end-Np+1:end),5) = JF_ce_De(end-Np+1:end);
  JF(ind_ce(end-Np+1:end),6) = beta_p/(p.epsilon_e_p * p.Faraday) * Grad_p * i_ep;
 %JF(ind_ce,6) = 0; %B_ce*i_ex / (1 - p.t_plus);
 
+%%% ADD BC
 % wrt epsilon_e_n
 % JF(ind_ce(1:Nn),15) = -beta_n*(1-p.t_plus)/(p.epsilon_e_n^2*p.Faraday) * Grad_n * i_en;
-JF(ind_ce(1:Nn),15) = 0; %-(1/p.epsilon_e_n) * JF_ce_ie(1:Nn);
+JF(ind_ce(1:Nn),15) = -(1/p.epsilon_e_n) * JF_ce_ie(1:Nn);
+
+%%% ADD BC
+% wrt epsilon_e_s
+
+%%% ADD BC
 % wrt epsilon_e_p
 % JF(ind_ce(end-Np+1:end),17) = -beta_p*(1-p.t_plus)/(p.epsilon_e_p^2*p.Faraday) * Grad_p * i_ep;
-JF(ind_ce(end-Np+1:end),17) = 0; %-(1/p.epsilon_e_p) * JF_ce_ie(end-Np+1:end);
+JF(ind_ce(end-Np+1:end),17) = -(1/p.epsilon_e_p) * JF_ce_ie(end-Np+1:end);
 
 %%% [DONE] Temperature: T(t)
 % Equilibrium Potential and Gradient wrt bulk concentration
@@ -253,7 +275,7 @@ JG(ind_phi_s_p,8) = -i_ep + Cur;
 %                     * Grad_s * log(c_es);
 % JG(ind_phi_e(end-Np+1:end),6) = -(2*p.R*p.T_amp)/(p.alph*p.Faraday) * (1 + 0) ...
 %                     * Grad_p * log(c_ep);
-JG(ind_phi_e,6) = 0; %1/(1-p.t_plus) * F3_pe*log(c_ex);
+JG(ind_phi_e,6) = 1/(1-p.t_plus) * F3_pe*log(c_ex);
 
 
 % wrt (1/kappa)
@@ -269,7 +291,7 @@ JG(ind_phi_e,9) = F2_pe*i_ex;
 %                     * Grad_s * log(c_es);
 % JG(ind_phi_e(end-Np+1:end),10) = -(2*p.R*p.T_amp)/(p.alph*p.Faraday) * (1 - p.t_plus) ...
 %                     * Grad_p * log(c_ep);
-JG(ind_phi_e,10) = 0; %1/(1+0) * F3_pe*log(c_ex);
+JG(ind_phi_e,10) = 1/(1+0) * F3_pe*log(c_ex);
 
 
 %%% [DONE] Butler-Volmer Equation

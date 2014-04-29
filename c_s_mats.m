@@ -92,8 +92,8 @@ Cp = Cp2;
 %% Set Varargout
 varargout{1} = Cn;
 varargout{2} = Cp;
-varargout{1} = An_normalized;
-varargout{2} = Cn_normalized;
+varargout{3} = An_normalized;
+varargout{4} = Ap_normalized;
 
 % Crank-Nicolson dicretization
 % F1n = eye(N) - p.delta_t/2 * An;

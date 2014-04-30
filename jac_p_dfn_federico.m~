@@ -329,6 +329,7 @@ JG(ind_jp,19) = 2/p.Faraday .* sinh(aFRT * eta_p) ...
 
 %% Sparsify Jacobian
 JF = sparse(JF * diag(p.theta0));
+JF(ind_csp,2)
 JFb = sparse(JFb);
 JG = sparse(JG * diag(p.theta0));
 JGb = sparse(JGb);

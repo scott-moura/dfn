@@ -42,7 +42,8 @@ tic;
 % DFN Data filename
 %fn = 'data/sensitivity/zero_dfn.mat';
 %fn = 'data/sensitivity/Federico_test_newBC.mat';
-fn='data/sensitivity/Federico_test_newBC_UDDS_500s.mat';
+%fn='data/sensitivity/Federico_test_newBC_UDDS_500s.mat';
+fn='data/sensitivity/Federico_test_newcs_UDDS_500s.mat';
 load(fn);
 disp(['Loaded DFN data file:  ' fn]);
 

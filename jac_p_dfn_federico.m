@@ -147,12 +147,12 @@ beta_p = 1 / (2 * p.L_p * p.delta_x_p);
 %%% [DONE] Li Diffusion in Solid Phase: c_s(x,r,t)
 
 %%%%%%%%%%%%%%%%%% Start commented by Federico %%%%%%%%%%%%%%%%
-An = zeros(3);
-An(3,2) = -6930*p.D_s_n/p.R_s_n^4;
-An(3,3) = -189/p.R_s_n^2;
+%An = zeros(3);
+%An(3,2) = -6930*p.D_s_n/p.R_s_n^4;
+%An(3,3) = -189/p.R_s_n^2;
 %%%%%%%%%%%%%%%%%%% End commented by Federico %%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Start added by Federico %%%%%%%%%%%%%%%%%%
-%An=p.A_csn_normalized;
+An=p.A_csn_normalized;
 %%%%%%%%%%%%%%%%%%%%% End added by Federico %%%%%%%%%%%%%%%%%%%
 
 % Loop through each "comb tooth" in anode
@@ -163,12 +163,12 @@ end
 JF(ind_csn,1) = reshape(JF_csn,[numel(JF_csn),1]);
 
 %%%%%%%%%%%%%%%%%% Start commented by Federico %%%%%%%%%%%%%%%%
-Ap = zeros(3);
-Ap(3,2) = -6930*p.D_s_p/p.R_s_p^4;
-Ap(3,3) = -189/p.R_s_p^2;
+%Ap = zeros(3);
+%Ap(3,2) = -6930*p.D_s_p/p.R_s_p^4;
+%Ap(3,3) = -189/p.R_s_p^2;
 %%%%%%%%%%%%%%%%%%% End commented by Federico %%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Start added by Federico %%%%%%%%%%%%%%%%%%
-%Ap=p.A_csp_normalized;
+Ap=p.A_csp_normalized;
 %%%%%%%%%%%%%%%%%%%%% End added by Federico %%%%%%%%%%%%%%%%%%%
 
 % Loop through each "comb tooth" in cathode

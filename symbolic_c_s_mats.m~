@@ -1,12 +1,16 @@
-%% Matrices for Li Diffusion in Solid Phase, c_s(r,t)
-%   Created May 21, 2012 by Scott Moura
-%   Modified Jan 10, 2014 by Hector Perez 
+%% Symbolic computation of Matrices for Li Diffusion in Solid Phase, c_s(r,t)
+% Created by Federico B. Apr. 29, 2014
 
-function [An,Bn,Ap,Bp,varargout] = c_s_mats(p)
 
 % Load Pade Approximations
-N = p.PadeOrder;
+N = 3;
 % load(['ws/pade_cs' num2str(N) '.mat']);
+
+syms R_s_n D_s_n R_s_p D_s_p;
+p.R_s_n=R_s_n;
+p.D_s_n=D_s_n;
+p.R_s_p=R_s_p;
+p.D_s_p=D_s_p;
 
 % Replace symbolic expressions with numerical values
 b_vecn = symsubsnum(p.R_s_n, p.D_s_n); %New Jan 10, 2014
@@ -28,8 +32,8 @@ bp_vecp = b_vecp / a_vecp(end);
 ap_vecp = a_vecp / a_vecp(end);
 
 % Create state-space representation
-An = diag(ones(N-1,1),1);
-Ap = diag(ones(N-1,1),1);
+An = sym(diag(ones(N-1,1),1));
+Ap = sym(diag(ones(N-1,1),1));
 for idx = 1:N
     An(N,idx) = -ap_vecn(idx);
     Ap(N,idx) = -ap_vecp(idx);
@@ -89,21 +93,3 @@ Bp = Bp2;
 Cn = Cn2;
 Cp = Cp2;
    
-%% Set Varargout
-varargout{1} = Cn;
-varargout{2} = Cp;
-varargout{3} = An_normalized;
-varargout{4} = Ap_normalized;
-
-% Crank-Nicolson dicretization
-% F1n = eye(N) - p.delta_t/2 * An;
-% F2n = -p.delta_t/2 * Bn;
-% 
-% F1p = eye(N) - p.delta_t/2 * Ap;
-% F2p = -p.delta_t/2 * Bp;
-% 
-% A1n = eye(N) + p.delta_t/2 * An;
-% A2n = p.delta_t/2 * Bn;
-% 
-% A1p = eye(N) + p.delta_t/2 * Ap;
-% A2p = p.delta_t/2 * Bp;

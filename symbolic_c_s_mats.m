@@ -67,8 +67,8 @@ Ap1 = Vp\Ap*Vp;
 Bn1 = Vn\Bn;
 Bp1 = Vp\Bp;
 
-Cn1 = Cn*Vn
-Cp1 = Cp*Vp
+Cn1 = Cn*Vn;
+Cp1 = Cp*Vp;
 
 % Perform additional transformation that scales third state, such that it's
 % exactly \bar{c}_s^\pm
@@ -90,6 +90,6 @@ Ap = Ap2;
 Ap_normalized=Ap/p.D_s_p; %added by Federico for sensitivity analysis (equivalent to having D_s_p=1)
 Bn = Bn2;
 Bp = Bp2;
-Cn = Cn2
-Cp = Cp2
+Cn = Cn2;
+Cp = Cp2;
    

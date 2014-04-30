@@ -63,3 +63,4 @@ clear S3;
 
 % Extract Diagonal
 D = diag(R);
+R_bar = R(

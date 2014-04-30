@@ -22,17 +22,17 @@ Nz = 3*Nnp + Nx;
 %% Input Signal
 
 % Manual Data
-%%%%%%%%%%% Uncommented by Federico %%%%%%%%%%%%%
-t = -2:p.delta_t:500;       % 60*60
-Iamp = zeros(length(t),1);
-Iamp(t >= 0) = 10;
-% Iamp(t >= (20*60)) = 0;
-% Iamp(t >= 20) = 0;
-% Iamp(t >= 30) = 10;
-% Iamp(t >= 40) = 5;
-I = Iamp;
+%%%%%%%%%%% Commented by Federico %%%%%%%%%%%%%
+% % t = -2:p.delta_t:500;       % 60*60
+% % Iamp = zeros(length(t),1);
+% % Iamp(t >= 0) = 10;
+% % % Iamp(t >= (20*60)) = 0;
+% % % Iamp(t >= 20) = 0;
+% % % Iamp(t >= 30) = 10;
+% % % Iamp(t >= 40) = 5;
+% % I = Iamp;
 
-%%%%%%%%% End Uncommented by Federico %%%%%%%%%%%
+%%%%%%%%% Commented by Federico %%%%%%%%%%%
 
 % Pulse Data
 % t = -2:p.delta_t:240;
@@ -41,19 +41,19 @@ I = Iamp;
 % Iamp = I;
 
 % Experimental Data
-%%%%%%%%%%% Commented by Federico %%%%%%%%%%%%%
-% %  load('data/UDDSx2_batt_ObsData.mat');
-% %  tdata = t;
-% %  Tfinal = tdata(end);
-% %  t = -2:p.delta_t:Tfinal;
-% %  Iamp = interp1(tdata,I,t,'spline',0);
-% %  Ah_amp = trapz(tdata,I)/3600;
-% %  I = Iamp * (0.4*35)/Ah_amp;
-% %  %cut the simulation time to 500 seconds
-% %  t=-2:p.delta_t:500;
-% %  I=I(1:length(t));
+%%%%%%%%%%% Uncommented by Federico %%%%%%%%%%%%%
+ load('data/UDDSx2_batt_ObsData.mat');
+ tdata = t;
+ Tfinal = tdata(end);
+ t = -2:p.delta_t:Tfinal;
+ Iamp = interp1(tdata,I,t,'spline',0);
+ Ah_amp = trapz(tdata,I)/3600;
+ I = Iamp * (0.4*35)/Ah_amp;
+ %cut the simulation time to 500 seconds
+ t=-2:p.delta_t:500;
+ I=I(1:length(t));
 
-%%%%%%%%% Commented by Federico %%%%%%%%%%%
+%%%%%%%%% Uncommented by Federico %%%%%%%%%%%
 
 NT = length(t);
 

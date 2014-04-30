@@ -37,7 +37,11 @@ clc;
 clear;
 
 %% Load Sensitivities
+<<<<<<< HEAD
 fn = 'data/sensitivity/sensitivity_new_c_s_UDDS_500s.mat';
+=======
+fn = 'data/sensitivity/zero_sensitivity.mat';
+>>>>>>> origin/master
 load(fn);
 disp(['Loaded Sensitivity data file:  ' fn]); 
 
@@ -62,6 +66,7 @@ clear S3;
 [Q,R,E] = qr(S_volt,0);
 
 % Extract Diagonal
+<<<<<<< HEAD
 D = diag(diag(R));
 % D(D < 0) = -D(D<0);
 Rbar = D\R;
@@ -85,3 +90,6 @@ end
 
 
 
+=======
+D = diag(R);
+>>>>>>> origin/master

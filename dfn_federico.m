@@ -32,7 +32,7 @@ Nz = 3*Nnp + Nx;
 % % % Iamp(t >= 40) = 5;
 % % I = Iamp;
 
-%%%%%%%%% End Commented by Federico %%%%%%%%%%%
+%%%%%%%%% Commented by Federico %%%%%%%%%%%
 
 % Pulse Data
 % t = -2:p.delta_t:240;
@@ -53,7 +53,7 @@ Nz = 3*Nnp + Nx;
  t=-2:p.delta_t:500;
  I=I(1:length(t));
 
-%%%%%%%%% End Uncommented by Federico %%%%%%%%%%%
+%%%%%%%%% Uncommented by Federico %%%%%%%%%%%
 
 NT = length(t);
 
@@ -165,10 +165,12 @@ z(:,1) = z0;
 
 %% Precompute data
 % Solid concentration matrices
-[A_csn,B_csn,A_csp,B_csp,C_csn,C_csp] = c_s_mats(p);
+[A_csn,B_csn,A_csp,B_csp,C_csn,C_csp,A_csn_normalized, A_csp_normalized] = c_s_mats(p);
 p.A_csn = A_csn;
+p.A_csn_normalized= A_csn_normalized;
 p.B_csn = B_csn;
 p.A_csp = A_csp;
+p.A_csp_normalized=A_csp_normalized;
 p.B_csp = B_csp;
 p.C_csn = C_csn;
 p.C_csp = C_csp;

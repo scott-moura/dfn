@@ -81,15 +81,29 @@ Cn2 = Cn1*Vn2;
 Cp2 = Cp1*Vp2;
 
 An = An2;
+An(3,:)=[0 0 0]; %reduce numerical error
+An(1,2)=0; %reduce numerical error
+An(2,1)=0; %reduce numerical error
+An_normalized=An/p.D_s_n; %added by Federico for sensitivity analysis (equivalent to having D_s_n=1)
 Ap = Ap2;
+Ap(3,:)=[0 0 0]; %reduce numerical error
+Ap(1,2)=0; %reduce numerical error
+Ap(2,1)=0; %reduce numerical error
+Ap_normalized=Ap/p.D_s_p; %added by Federico for sensitivity analysis (equivalent to having D_s_p=1)
 Bn = Bn2;
 Bp = Bp2;
 Cn = Cn2;
+Cn(2,1)=0; %reduce numerical error
+Cn(2,2)=0; %reduce numerical error
 Cp = Cp2;
+Cp(2,1)=0; %reduce numerical error
+Cp(2,2)=0; %reduce numerical error
    
 %% Set Varargout
 varargout{1} = Cn;
 varargout{2} = Cp;
+varargout{3} = An_normalized;
+varargout{4} = Ap_normalized;
 
 % Crank-Nicolson dicretization
 % F1n = eye(N) - p.delta_t/2 * An;

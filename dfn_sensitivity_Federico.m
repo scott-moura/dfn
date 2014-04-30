@@ -42,7 +42,9 @@ tic;
 % DFN Data filename
 %fn = 'data/sensitivity/zero_dfn.mat';
 %fn = 'data/sensitivity/Federico_test_newBC.mat';
-fn='data/sensitivity/Federico_test_newBC_UDDS_500s.mat';
+%fn='data/sensitivity/Federico_test_newBC_UDDS_500s.mat';
+fn='data/sensitivity/Federico_test_newcs_UDDS_500s.mat';
+%fn='data/sensitivity/Federico_test_newcs_constant_discharge.mat';
 load(fn);
 disp(['Loaded DFN data file:  ' fn]);
 
@@ -124,10 +126,12 @@ p.theta0 = theta0;
 
 %% Precompute Data
 % Solid concentration matrices
-[A_csn,B_csn,A_csp,B_csp,C_csn,C_csp] = c_s_mats(p);
+[A_csn,B_csn,A_csp,B_csp,C_csn,C_csp, A_csn_normalized, A_csp_normalized] = c_s_mats(p);
 p.A_csn = A_csn;
+p.A_csn_normalized=A_csn_normalized;
 p.B_csn = B_csn;
 p.A_csp = A_csp;
+p.A_csp_normalized=A_csp_normalized;
 p.B_csp = B_csp;
 p.C_csn = C_csn;
 p.C_csp = C_csp;
@@ -177,6 +181,7 @@ DD = zeros(Ny, Nt);
 CCz(1,ind_phi_s_p) = p.C_psp(2,:);
 CCz(1,ind_phi_s_n) = -p.C_psn(1,:);
 
+
 % SOC
 for i = 1:Nn
     CCx(2,(1:3)+3*(i-1)) = 1/(Nn*p.c_s_n_max) * p.C_csn(2,:);
@@ -186,9 +191,9 @@ end
 CCx(3,ind_T) = 1;
 
 %% Preallocate Sensitivity Vars
-S1 = zeros(size(x,1), Nt, NT);  % Sensitivity w.r.t. x vars
-S2 = zeros(size(z,1), Nt, NT);  % Sensitivity w.r.t. z vars
-S3 = zeros(Ny, Nt, NT);         % Sensitivity w.r.t. z vars
+S1 = zeros(size(x,1), Nt, NT);  % Sensitivity of x vars
+S2 = zeros(size(z,1), Nt, NT);  % Sensitivity of z vars
+S3 = zeros(Ny, Nt, NT);         % Sensitivity of outputs
 
 %% Solve Sensitivity Eqns
 disp('Solving Sensitivity Eqns...');
@@ -227,12 +232,12 @@ for k = 1:(NT-1)
     
     %%% Output sensitivity matrices
     % Jacobian of SOC (y=2) w.r.t. c_s_n_max (theta=18)
-    c_s_n = x(1:Ncsn,k+1);
+    c_s_n =x(1:Ncsn,k+1);
     c_s_n_mat = reshape(c_s_n,p.PadeOrder,p.Nxn-1);
     DD(2,18) = -1/(p.c_s_n_max^2) * mean(p.C_csn(2,:) * c_s_n_mat);
     
     % Jacobian of SOC (y=2) w.r.t. D_s_n (theta=1)
-    dGdD = [3/p.R_s_n*6930*p.D_s_n/p.R_s_n^4, 3/p.R_s_n*189/p.R_s_n^2, 0];
+    dGdD =[0, 0 ,0]; %[3/p.R_s_n*6930*p.D_s_n/p.R_s_n^4, 3/p.R_s_n*189/p.R_s_n^2, 0];
     DD(2,1) = 1/(p.c_s_n_max) * mean(dGdD * c_s_n_mat);
     
     %%% Time-stepping

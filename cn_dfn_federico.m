@@ -10,7 +10,7 @@ Cur_nxt = Cur_vec(3);
 %% Parameters
 
 % Newton params
-maxIters = 100;
+maxIters = 1500;
 tol = 1e-6;
 
 % Sparse Linear System Solver Params

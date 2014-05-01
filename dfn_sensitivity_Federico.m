@@ -49,6 +49,19 @@ fn='data/sensitivity/Federico_test_new_cathode_UDDS_500s.mat';
 load(fn);
 disp(['Loaded DFN data file:  ' fn]);
 
+% If time is too long, resample the data
+if length(out.time)>1000
+    resampling=16;
+    out.time=out.time(:,3:resampling:end);
+    out.cur=out.cur(:,3:resampling:end);
+    out.x=out.x(:,3:resampling:end);
+    out.z=out.z(:,3:resampling:end);
+    out.soc=out.soc(3:resampling:end,:);
+    out.volt=out.volt(3:resampling:end,:);
+    out.temp=out.temp(3:resampling:end,:);
+end
+
+
 % Parse output data
 t = out.time;
 p = out.p;
@@ -62,6 +75,7 @@ Volt = out.volt;
 NT = length(t); % Length of time
 Nt = 21;        % Number of params
 Ny = 3;         % Number of outputs
+
 
 Ncsn = p.PadeOrder * (p.Nxn-1);
 Ncsp = p.PadeOrder * (p.Nxp-1);

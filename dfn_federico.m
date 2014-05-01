@@ -45,10 +45,11 @@ Nz = 3*Nnp + Nx;
  load('data/UDDSx2_batt_ObsData.mat');
  tdata = t;
  Tfinal = tdata(end);
+ p.delta_t=0.005; % refine the time step
  t = -2:p.delta_t:Tfinal;
  Iamp = interp1(tdata,I,t,'spline',0);
  Ah_amp = trapz(tdata,I)/3600;
- I = Iamp * (0.4*35)/Ah_amp;
+ I = Iamp * (0.4*35)/Ah_amp;%Iamp * (0.4*35)/Ah_amp;
  %cut the simulation time to 500 seconds
  t=-2:p.delta_t:500;
  I=I(1:length(t));

@@ -1,7 +1,7 @@
 %% DAEs for Doyle-Fuller-Newman Model
 %   Created May 22, 2012 by Scott Moura
 
-function [f, g, varargout] = dae_dfn(x,z,Cur,p)
+function [f, g, varargout] = dae_dfn_federico(x,z,Cur,p)
 
 
 %% Parse out states

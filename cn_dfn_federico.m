@@ -1,7 +1,7 @@
 %% Crank-Nicolson Eqns for Doyle-Fuller-Newman Model
 %   Created May 22, 2012 by Scott Moura
 
-function [x_nxtf, z_nxtf, varargout] = cn_dfn(x,z,Cur_vec,p)
+function [x_nxtf, z_nxtf, varargout] = cn_dfn_federico(x,z,Cur_vec,p)
 
 Cur_prv = Cur_vec(1);
 Cur = Cur_vec(2);
@@ -62,7 +62,8 @@ if(Cur ~= Cur_prv)
         if(relres_z < tol)
             break;
         elseif(idx == (maxIters-1))
-            fprintf(1,'Warning: Max Newton Iters Reached | RelChange = %3.2f%%\n',relres_z*100);
+            fprintf(1,'Warning: Max Newton Iterations Reached | RelChange = %3.2f%%\n',relres_z*100);
+            error('Error cn_dfn_federico.m line 66: Max Newton Iterations Reached')
         end
         
     end
@@ -180,6 +181,7 @@ for idx = 1:(maxIters-1)
         break;
     elseif(idx == (maxIters-1))
         fprintf(1,'Warning: Max Newton Iters Reached | RelChange = %1.4e%%\n',relres(end)*100);
+        error('Error cn_dfn_federico.m line 184: Max Newton Iterations Reached')
     end
     
 end

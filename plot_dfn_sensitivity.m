@@ -121,7 +121,7 @@ figure(3); clf;
 set(gcf,'Position',[234     3   564   695],'PaperPositionMode','auto');
 
 barh(log10(Snorm.soc.unsort(end:-1:1)));
-xlim([-11 2])
+xlim([-13 2])
 ylim([0 Nt+1])
 set(gca,'YTick',1:Nt);
 set(gca,'Position',[0.2 0.1 0.75 0.85])
@@ -147,3 +147,17 @@ set(gca,'Position',[0.2 0.1 0.75 0.85])
 set(gca,'FontSize',fs);
 xlabel('Sensitivity Magnitude [log scale]','FontSize',fs)
 title('\bf Sensitivity of Temp.','FontSize',fs+2);
+
+
+% Voltage Sensitivity
+figure(5);
+
+barh(log10(Snorm.volt.unsort));
+xlim([-5 2.5])
+set(gca,'YTick',1:Nt);
+set(gca,'Position',[0.2 0.1 0.75 0.85])
+%set(gca, 'YTickLabel', params);
+[hx,hy] = format_ticks(gca,' ',params,1:5,[],0,0,0.02,'FontSize',fs,'FontWeight','Bold');
+set(gca,'FontSize',fs);
+xlabel('Sensitivity Magnitude [log scale]','FontSize',fs)
+title('\bf Sensitivity of Voltage','FontSize',fs+2);

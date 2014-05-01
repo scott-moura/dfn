@@ -43,10 +43,23 @@ tic;
 %fn = 'data/sensitivity/zero_dfn.mat';
 %fn = 'data/sensitivity/Federico_test_newBC.mat';
 %fn='data/sensitivity/Federico_test_newBC_UDDS_500s.mat';
-fn='data/sensitivity/Federico_test_newcs_UDDS_500s.mat';
+%fn='data/sensitivity/Federico_test_newcs_UDDS_500s.mat';
 %fn='data/sensitivity/Federico_test_newcs_constant_discharge.mat';
+fn='data/sensitivity/Federico_test_new_cathode_UDDS_500s.mat';
 load(fn);
 disp(['Loaded DFN data file:  ' fn]);
+
+% If time is too long, resample the data
+if length(out.time)>1000
+    out.time=out.time(:,3:10:end);
+    out.cur=out.cur(:,3:10:end);
+    out.x=out.x(:,3:10:end);
+    out.z=out.z(:,3:10:end);
+    out.soc=out.soc(3:10:end,:);
+    out.volt=out.volt(3:10:end,:);
+    out.temp=out.temp(3:10:end,:);
+end
+
 
 % Parse output data
 t = out.time;
@@ -61,6 +74,7 @@ Volt = out.volt;
 NT = length(t); % Length of time
 Nt = 21;        % Number of params
 Ny = 3;         % Number of outputs
+
 
 Ncsn = p.PadeOrder * (p.Nxn-1);
 Ncsp = p.PadeOrder * (p.Nxp-1);

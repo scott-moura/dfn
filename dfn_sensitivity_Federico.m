@@ -52,6 +52,7 @@ disp(['Loaded DFN data file:  ' fn]);
 % If time is too long, resample the data
 if length(out.time)>1000
     resampling=16;
+    out.p.delta_t=out.p.delta_t*resampling;
     out.time=out.time(:,3:resampling:end);
     out.cur=out.cur(:,3:resampling:end);
     out.x=out.x(:,3:resampling:end);

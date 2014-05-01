@@ -51,13 +51,14 @@ disp(['Loaded DFN data file:  ' fn]);
 
 % If time is too long, resample the data
 if length(out.time)>1000
-    out.time=out.time(:,3:10:end);
-    out.cur=out.cur(:,3:10:end);
-    out.x=out.x(:,3:10:end);
-    out.z=out.z(:,3:10:end);
-    out.soc=out.soc(3:10:end,:);
-    out.volt=out.volt(3:10:end,:);
-    out.temp=out.temp(3:10:end,:);
+    resampling=16;
+    out.time=out.time(:,3:resampling:end);
+    out.cur=out.cur(:,3:resampling:end);
+    out.x=out.x(:,3:resampling:end);
+    out.z=out.z(:,3:resampling:end);
+    out.soc=out.soc(3:resampling:end,:);
+    out.volt=out.volt(3:resampling:end,:);
+    out.temp=out.temp(3:resampling:end,:);
 end
 
 

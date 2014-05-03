@@ -80,26 +80,19 @@ for idx = 1:Nt
 end
 
 %% Plot Linear Dependence Matrix
-fs = 16;
-
-cutoff = 0.1;
+cutoff = 0.3;
 
 figure(1); clf;
-set(gcf,'Position',[330    39   710   659]);
+set(gcf,'Position',[360 39 680 659]);
 for ii = 1:Nt
     for jj = (ii+1):Nt
         
-        % If NaN, then don't include
         if(isnan(Rbar(ii,jj)))
             col = [0 0 0];
-        
-        % (LINEARLY DEPENDENT) If dot product of sensitivity is sufficiently close to one, then
-        % only plot the border and make interior white
+            
         elseif(abs(Rbar(ii,jj)) > cutoff)
             col = [abs(Rbar(ii,jj)), 0, 0];
-            plot(ii,jj,'s','MarkerSize',24,'MarkerEdgeColor',col,'LineWidth',2);
-        % (LINEARLY INDEPENDENT) If dot product of sensitivity is sufficiently close to one, then
-        % only plot the border and make interior white
+            plot(ii,jj,'s','MarkerSize',24,'MarkerEdgeColor',col);
         else
             col = [abs(Rbar(ii,jj)), 0, 0];
             plot(ii,jj,'s','MarkerSize',24,'MarkerEdgeColor',col,...
@@ -110,15 +103,8 @@ for ii = 1:Nt
     end
 end
 
-% colorbar;
-
 xlim([0 22])
 ylim([0 22])
 
-set(gca,'FontSize',fs);
-set(gca,'XTick',get(gca,'YTick'));
-grid on;
-xlabel('$$\textrm{Param} \ \ \ \theta_i \ \ \textrm{index}$$','FontSize',fs+2,'interpreter','latex')
-ylabel('$$\textrm{Param} \ \ \ \theta_j \ \ \textrm{index}$$','FontSize',fs+2,'interpreter','latex')
-tit = ['$$<S_i,S_j>/ \|S_i\| \|S_j\| \qquad', sprintf(' \\textrm{Cutoff = %1.1f}$$',cutoff)];
-title(tit,'interpreter','latex');
+
+

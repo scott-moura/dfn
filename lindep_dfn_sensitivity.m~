@@ -50,7 +50,7 @@ params1 = {'$D_s^{^{\_}}$','$D_s^+$','$D_e^-$','$D_e^{sep}$','$D_e^+$','$1{^{\_\
     '$c_{s,\max}^{^{\_}}$','$c_{s,\max}^{+}$','$h$','$(\rho_{avg}C_p)^{{^{\_}}1}$'};
 
 %% Load Sensitivities
-fn = 'data/sensitivity/sensitivity_new_c_s_UDDS_500s.mat';
+fn = 'data/sensitivity/sensitivity_new_c_s_constant_discharge.mat';
 load(fn);
 disp(['Loaded Sensitivity data file:  ' fn]); 
 
@@ -86,7 +86,7 @@ Dsq = (diag(D)).^2;
 
 % Compute additional Variance
 U = inv(Rbar)';
-minvar = 1./Dsq .* diag(U*U');
+minvar = 1./Dsq .* diag(U*U')
 
 %%% Output Orthogonalized Parameter Ranking
 
@@ -116,15 +116,14 @@ title('\bf Orthogonalized Sensitivity of Voltage','FontSize',fs+2);
 
 % Voltage Min Variance
 figure(21); clf;
-set(gcf,'Position',[53 319 1092 362]);
 plot(1:Nt,log10(minvar),'bo-','LineWidth',2);
 xlim([0.5 Nt+0.5])
 set(gca,'XTick',1:Nt);
-set(gca,'Position',[0.07 0.1 0.92 0.8])
-[hx,hy] = format_ticks(gca,params1(E),' ',[],0:5:15,0,0,0.02,'FontSize',fs,'FontWeight','Bold');
+set(gca,'Position',[0.1 0.1 0.85 0.85])
+[hx,hy] = format_ticks(gca,params1(E),' ',[],0:5:25,0,0,0.02,'FontSize',fs,'FontWeight','Bold');
 set(gca,'FontSize',fs);
-ylabel('Min. Additional Variance [log scale]','FontSize',fs)
-title('\bf Min. Additional Variance for Voltage','FontSize',fs+2);
+xlabel('Squared Orthogonal Sensitivity [log scale]','FontSize',fs)
+title('\bf Orthogonalized Sensitivity of Voltage','FontSize',fs+2);
 
 %% Parameter Ranking by successive orthogonalization (SOC)
 % Use QR decomposition in economy mode
@@ -134,16 +133,10 @@ title('\bf Min. Additional Variance for Voltage','FontSize',fs+2);
 D = diag(diag(R));
 % D(D < 0) = -D(D<0);
 Rbar = D\R;
-Rbar(end-1,:) = 0;
-Rbar(end,:) = 0;
-Rbar(end,end) = 1;
-Rbar(end-1,end-1) = 1;
 
 Dsq = (diag(D)).^2;
 
 % Compute additional Variance
-U = inv(Rbar)';
-minvar = 1./Dsq .* diag(U*U');
 
 %%% Output Orthogonalized Parameter Ranking
 
@@ -171,18 +164,6 @@ set(gca,'FontSize',fs);
 xlabel('Squared Orthogonal Sensitivity [log scale]','FontSize',fs)
 title('\bf Orthogonalized Sensitivity of SOC','FontSize',fs+2);
 
-% SOC Min Variance
-figure(22); clf;
-set(gcf,'Position',[53 319 1092 362]);
-plot(1:Nt,log10(minvar),'bo-','LineWidth',2);
-xlim([0.5 Nt+0.5])
-set(gca,'XTick',1:Nt);
-set(gca,'Position',[0.07 0.1 0.92 0.8])
-[hx,hy] = format_ticks(gca,params1(E),' ',[],-5:5:25,0,0,0.02,'FontSize',fs,'FontWeight','Bold');
-set(gca,'FontSize',fs);
-ylabel('Min. Additional Variance [log scale]','FontSize',fs)
-title('\bf Min. Additional Variance for SOC','FontSize',fs+2);
-
 %% Parameter Ranking by successive orthogonalization (Temp)
 % Use QR decomposition in economy mode
 [Q,R,E] = qr(S_temp,0);
@@ -193,10 +174,6 @@ D = diag(diag(R));
 Rbar = D\R;
 
 Dsq = (diag(D)).^2;
-
-% Compute additional Variance
-U = inv(Rbar)';
-minvar = 1./Dsq .* diag(U*U');
 
 %%% Output Orthogonalized Parameter Ranking
 
@@ -223,20 +200,6 @@ set(gca,'Position',[0.2 0.1 0.75 0.85])
 set(gca,'FontSize',fs);
 xlabel('Squared Orthogonal Sensitivity [log scale]','FontSize',fs)
 title('\bf Orthogonalized Sensitivity of Temp.','FontSize',fs+2);
-
-% SOC Min Variance
-figure(23); clf;
-set(gcf,'Position',[53 319 1092 362]);
-plot(1:Nt,log10(minvar),'bo-','LineWidth',2);
-xlim([0.5 Nt+0.5])
-set(gca,'XTick',1:Nt);
-set(gca,'Position',[0.07 0.1 0.92 0.8])
-[hx,hy] = format_ticks(gca,params1(E),' ',[],5:5:20,0,0,0.02,'FontSize',fs,'FontWeight','Bold');
-set(gca,'FontSize',fs);
-ylabel('Min. Additional Variance [log scale]','FontSize',fs)
-title('\bf Min. Additional Variance for Temperature','FontSize',fs+2);
-
-%%
 
 %%%%%%%%%%%%%%%%%
 % Turns out the analysis below is not necessary

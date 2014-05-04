@@ -7,17 +7,16 @@ clc;
 
 fs = 15;
 
-params = {'$D_s^{^{\_}}$','$D_s^+$','$D_e^-$','$D_e^{sep}$','$D_e^+$','$1{^{\_\ }}t_c^0$',...
-    '$1/\sigma^{^{\_}}$','$1/\sigma^+$','$1/\kappa$','$(1+\frac{d \ln f_{c/a}}{d \ln c_e})$','$k^{^{\_}}$','$k^+$',...
-    '$R_f^{^{\_}}$','$R_f^+$','$\epsilon_e^{^{\_}}$','$\epsilon_e^{sep}$','$\epsilon_e^+$',...
-    '$c_{s,\max}^{^{\_}}$','$c_{s,\max}^{+}$','$h$','$(\rho_{avg}C_p)^{{^{\_}}1}$'};
+params = {'$D_s^-$','$D_s^+$','$D_e^-$','$D_e^{sep}$','$D_e^+$','$1-t_c^0$',...
+    '$1/\sigma^-$','$1/\sigma^+$','$1/\kappa$','$(1+\frac{d \ln f_{c/a}}{d \ln c_e})$','$k^-$','$k^+$',...
+    '$R_f^-$','$R_f^+$','$\epsilon_e^-$','$\epsilon_e^{sep}$','$\epsilon_e^+$',...
+    '$c_{s,\max}^{\-}$','$c_{s,\max}^{+}$','$h$','$(\rho_{avg}C_p)^{\-1}$'};
 
 %% Load Data;
 
 %%%%%%%%%%%%%%%%%% Start Commented by Federico %%%%%%%%%%%%%%%%%%%%%%
 % Load Sensitivities
 %fn = 'data/sensitivity/zero_sensitivity.mat';
-%fn= 'data/sensitivity/sensitivity_new_c_s_UDDS_500s.mat';
 fn= 'data/sensitivity/sensitivity_new_c_s_constant_discharge.mat';
 load(fn);
 disp(['Loaded Sensitivity data file:  ' fn]); 
